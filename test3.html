@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bar Chart Example</title>
+</head>
+<body>
+<canvas id="DemoCanvas" width="1920" height="1000"></canvas>  
+<script>  
+var canvas = document.getElementById('DemoCanvas');
+//Always check for properties and methods, to make sure your code doesn't break in other browsers.
+
+if (canvas.getContext) 
+{
+   var context = canvas.getContext('2d');
+   var ix, iy, ibase, istart, ispace;
+   var maxval;
+   var scalemax;
+   var scaledivs;
+   var scalestep;
+   var xun;
+   var htitle;
+   var ctx = canvas.getContext('2d');
+   const people = [];
+   const sales = [];
+   const xscales = [];
+   const xdivs = [];
+   const xunit = [];
+
+   xscales.push( 100e3, 500e3, 900e3, 1e6, 5e6, 10e6, 20e6, 25e6, 30e6, 35e6, 40e6, 50e6, 60e6 );
+   xdivs.push(   10,    5,     9,     10,  5,   10,   10,   5,    6,    7,    8,    5,    6 );
+   xunit.push(   1e4,   1e5,   1e5,   1e5, 1e6, 1e6,  1e6,  1e6,  1e6,  1e6,  1e6,  1e6,  1e6 );
+   /* Draw the Y Axis */
+   // Reset the current path
+   context.beginPath(); 
+   // Staring point (10,45)
+   context.moveTo(400,40);
+   // End point (180,47)
+   context.lineTo(400,900);
+   // Make the line visible
+   context.stroke();
+
+   /* Draw the X Axis */
+   context.beginPath(); 
+   context.moveTo(400,900);
+   context.lineTo(1800,900);
+   context.stroke();
+
+   ctx.font = 'italic 32px sans-serif';
+   ctx.fillText('HTML5 Canvas Tutorial', 800, 40); 
+
+   people.push("Peter McKernan", "Luis Lozano", "Danny Stamps", "Joe LaLiberte", "Raymond Harvey", "Andrew Tapia" );
+   sales.push( 21103050, 6e6, 1e6, 1e6, 2931088, 800e3 );
+   maxval = Math.max(...sales);
+   console.log(sales[0]);
+   console.log(maxval);
+   
+   ispace = 860 / people.length;
+   istart = 100;
+
+   /* Draw the Names and bar chart */
+   for (ix=0; ix<people.length; ix++) {
+       ctx.fillStyle='#000000';    // color of fill
+       ctx = canvas.getContext('2d');
+       ctx.font = 'italic 32px sans-serif';
+       ctx.fillText(people[ix], 120, istart + ix*ispace); 
+
+       context.beginPath();
+       context.moveTo(380, istart + ix*ispace);
+       context.lineTo(420, istart + ix*ispace);
+       context.stroke();
+
+       ctx.fillStyle='#009933';    // color of fill
+       ctx.fillRect( 400, istart+ix*ispace-35,  1000 * sales[ix]/maxval, 80);
+   }
+
+   /* Divide up the horizontal axis */
+   for (ix=0; ix<xscales.length; ix++) {
+       if ( xscales[ix] > maxval ) break;
+   }
+   scalemax = xscales[ix];
+   scaledivs = xdivs[ix];
+   scalestep = xscales[ix] / xdivs[ix];
+   xun = xunit[ix];
+   console.log(scalemax);
+   console.log(scaledivs);
+   console.log(scalestep);
+
+   /* Draw the Horizontal Scale Axis Numbers */
+   for (ix=0; ix<scalemax; ix+=scalestep) {
+       console.log(ix);
+       ctx.beginPath();
+       ctx.moveTo(400+1000*ix/maxval ,880);
+       ctx.lineTo(400+1000*ix/maxval ,920);
+       ctx.stroke();
+       ctx.fillStyle="#000000"; 
+       ctx.fillText(ix/xun, 390+1000*ix/maxval ,950);
+   }
+   
+   if (scalemax < 1e6 ) 
+        htitle = "Sales Amount, Thousands of Dollars";
+   else 
+        htitle = "Sales Amount, Millions of Dollars";
+       
+   ctx.fillText(htitle, 1000 ,980);
+   
+
+}
+</script> 
+</body>
+</html>
+
